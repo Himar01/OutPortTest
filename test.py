@@ -1,11 +1,19 @@
 #!/usr/bin/python3
 
-import os
+import os,re,subprocess
 
 #There should be 65535 ports
 
-for i in range(1,3):
-	print(i)
-	url = str(("curl portquiz.net:{}").format(i))
-	result = os.system(url)
-	print(result)
+
+def check_port(port):
+	proc = subprocess.Popen(["/usr/bin/curl -s portquiz.net:%s" % port, ""], stdout=subprocess.PIPE, shell=True)
+	try:
+		proc.communicate(timeout=1)
+		return True
+	except:
+		return False
+if __name__=='__main__':
+
+	for port in range(1,7):
+		if(check_port(port)):
+			print(("{},").format(port),end="")
